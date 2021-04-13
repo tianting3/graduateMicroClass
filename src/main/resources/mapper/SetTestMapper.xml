@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.SetTestMapper">
+
+    <select id="querySumScoreByTeacherName" resultType="int" parameterType="string">
+        SELECT
+            sum( q.question_score ) score
+        FROM
+            question q,
+            choice_question c
+        WHERE
+            q.id = c.question_id
+            AND c.paper_id IS NULL
+            AND c.teacher_name = #{teacherName}
+    </select>
+
+    <!--查询题目数量-->
+    <select id="queryTestCount" resultType="int" parameterType="string">
+        SELECT
+            count( id )
+        FROM
+            choice_question
+        WHERE
+            paper_id IS NULL
+            AND teacher_name = #{teacherName}
+    </select>
+
+    <!--将题目增加到试卷中-->
+    <update id="updatePaperId" >
+        UPDATE choice_question
+        SET paper_id =#{id}
+        WHERE
+            paper_id IS NULL
+            AND teacher_name = #{teacherName}
+    </update>
+
+    <!--添加试卷-->
+    <insert id="insertPaper" parameterType="com.tt.wkkt.model.TestPaper">
+        INSERT INTO test_paper ( test_name, number, score, test_time, degree,teacher_name )
+        VALUES
+            ( #{testName},#{number},#{score},#{testTime},#{degree},#{teacherName})
+    </insert>
+    
+    <!--查询试卷的id-->
+    <select id="queryIdByPaperName" parameterType="string" resultType="int">
+        SELECT
+            id
+        FROM
+            test_paper
+        WHERE
+            test_name = #{testName}
+    </select>
+
+    <!--获得所有的试卷名，不可以重复-->
+    <select id="queryAllTestName" resultType="string">
+        SELECT
+            test_name
+        FROM
+            test_paper
+    </select>
+
+    <!--查询所有试卷-->
+    <select id="queryAllPaper" resultType="com.tt.wkkt.model.TestPaper" parameterType="string">
+        SELECT
+            id,
+            test_name,
+            number,
+            score,
+            test_time,
+            degree,
+            teacher_name
+        FROM
+            test_paper
+        WHERE
+            teacher_name = #{teacherName}
+            order by id desc
+    </select>
+
+    <!--删除试卷-->
+    <delete id="deletePaperById" parameterType="int">
+        DELETE
+        FROM
+            test_paper
+        WHERE
+            id =#{id}
+    </delete>
+
+    <!--根据试卷id删除对应的题目-->
+    <delete id="deleteChoiceTestByPaperId" parameterType="int">
+        DELETE
+        FROM
+            choice_question
+        WHERE
+            paper_id =#{id}
+    </delete>
+
+
+
+    <update id="updatePaperById" parameterType="com.tt.wkkt.model.TestPaper">
+        UPDATE test_paper
+        SET test_name = #{testName},
+        test_time = #{testTime},
+        degree = #{degree},
+        number = #{number},
+        score = #{score},
+        teacher_name = #{teacherName}
+        WHERE
+            id =#{id}
+    </update>
+
+    <select id="selectAllTestByPaperId" parameterType="int" resultType="int">
+        SELECT
+            question_id
+        FROM
+            choice_question
+        WHERE
+            paper_id = #{id}
+    </select>
+
+    <select id="selectAllquestionById" parameterType="list" resultType="com.tt.wkkt.vo.resp.QuestionRespVO">
+        SELECT
+            id,
+            question,
+            items,
+            answer,
+            type,
+            degree,
+            points,
+            user_name,
+            question_score
+        FROM
+            question
+        WHERE
+            id in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        order by id desc
+    </select>
+
+
+    <select id="selectquestionById" parameterType="list" resultType="com.tt.wkkt.model.ChangeQues">
+        SELECT
+        id,
+        question,
+        items,
+        answer,
+        type,
+        degree,
+        points,
+        user_name,
+        question_score
+        FROM
+        question
+        WHERE
+        id in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        order by type asc
+    </select>
+
+    <!--根据试卷id获得试卷的时间-->
+    <select id="getTimeByPaperId" parameterType="int" resultType="int">
+        SELECT
+            test_time
+        FROM
+            issue_paper
+        WHERE
+            paper_id = #{id}
+    </select>
+</mapper>

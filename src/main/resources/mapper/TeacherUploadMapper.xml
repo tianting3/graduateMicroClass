@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.TeacherUploadMapper">
+<insert id="insertFile" parameterType="com.tt.wkkt.model.FileUpload" >
+        INSERT INTO file_upload ( file_name, address )
+    VALUES
+        ( #{fileName}, #{address})
+</insert>
+
+    <select id="queryIsExsit" parameterType="string" resultType="string">
+        SELECT
+            1
+        FROM
+            file_upload
+        WHERE
+            file_name = #{fileName}
+            LIMIT 1
+    </select>
+
+    <insert id="insertTeacherFile" parameterType="com.tt.wkkt.vo.req.FilesReqVO">
+        INSERT INTO files ( path, file_name, teacher_name )
+    VALUES
+        (#{path},#{fileName},#{teacherName} )
+    </insert>
+
+    <select id="queryByTeacherName" parameterType="string" resultType="com.tt.wkkt.vo.req.FilesReqVO">
+        SELECT
+            id,file_name,path,teacher_name
+        FROM
+            files
+        WHERE
+            teacher_name = #{teacherName}
+        order by id desc
+    </select>
+
+    <delete id="deleteManyFilesByIds" parameterType="list">
+        delete from  files where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteFileById" parameterType="int">
+        DELETE
+        FROM
+            files
+        WHERE
+            id =#{id}
+    </delete>
+
+    <select id="queryPathById" parameterType="int" resultType="string">
+        SELECT
+            path
+        FROM
+            files
+        WHERE
+            id = #{id}
+    </select>
+
+    <select id="queryPathsByIds" parameterType="list" resultType="string">
+        select
+            path
+        FROM
+            files
+        where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteUploadByFilename" parameterType="string">
+        DELETE
+        FROM
+            file_upload
+        WHERE
+            file_name =#{fileName}
+    </delete>
+
+    <delete id="deleteUploadByFilenames" parameterType="list">
+        DELETE
+        FROM
+            file_upload
+        WHERE
+            file_name in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

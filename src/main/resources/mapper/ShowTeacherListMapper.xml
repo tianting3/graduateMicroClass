@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.ShowTeacherListMapper">
+
+<!--    查询老师对应的课程-->
+    <select id="queryTeacherCourse" resultType="com.tt.wkkt.vo.resp.TeacherCourseRespVO">
+        SELECT
+            teacher.id teacher_id,
+            user_name,
+            course_name,
+            teacher_name
+        FROM
+            teacher,
+            course
+        WHERE
+            teacher.id = course.teacher_id
+    </select>
+
+    <select id="queryFilesByTeachername" parameterType="string" resultType="string">
+        SELECT
+            file_name
+        FROM
+            files
+        WHERE
+            teacher_name = #{teacherName}
+        ORDER BY id desc
+    </select>
+
+
+    <select id="queryPathByFilename" parameterType="string" resultType="string">
+        SELECT
+            path
+        FROM
+            files
+        WHERE
+            file_name = #{fileName}
+    </select>
+</mapper>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.LoginMapper">
+<select id="checkStudent" resultType="com.tt.wkkt.model.Student">
+select student_name,id,user_name,password from student where user_name=#{userName} and password=#{password}
+</select>
+<select id="checkTeacher" resultType="com.tt.wkkt.model.Teacher">
+    select teacher_name,id,user_name,password from teacher where user_name=#{userName} and password=#{password}
+</select>
+</mapper>

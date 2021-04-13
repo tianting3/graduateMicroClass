@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.IssuePaperMapper">
+    <!--发布试卷-->
+    <insert id="issuePaper" parameterType="com.tt.wkkt.model.IssuePaper">
+        INSERT INTO issue_paper ( paper_id, test_name, test_time, degree, teacher_name ,score,issue_time)
+        VALUES
+            ( #{paperId},#{testName},#{testTime},#{degree},#{teacherName},#{score},#{issueTime})
+    </insert>
+    <select id="queryAllTestName" resultType="string" parameterType="string">
+        SELECT
+            test_name
+        FROM
+            issue_paper
+        WHERE
+            teacher_name = #{teacherName}
+    </select>
+
+</mapper>

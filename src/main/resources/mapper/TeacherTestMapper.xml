@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.TeacherTestMapper">
+    <select id="selectTypeById" parameterType="int" resultType="int">
+        SELECT
+            type
+        FROM
+            question
+        WHERE
+            id = #{id}
+    </select>
+
+    <insert id="insertQustion" parameterType="com.tt.wkkt.vo.req.ChoiceQuestionReqVO">
+        INSERT INTO choice_question ( question_id, teacher_name, order_num )
+        VALUES
+            (#{questionId}, #{teacherName}, #{orderNum} )
+    </insert>
+
+    <select id="queryAllQuestionId" resultType="java.lang.Integer">
+        SELECT
+            question_id
+        FROM
+            choice_question
+        where paper_id is null
+    </select>
+
+    <select id="querySuccessAdd" parameterType="string" resultType="com.tt.wkkt.model.Question">
+       SELECT
+            question_id id,
+            question,
+            items,
+            answer,
+            type,
+            degree,
+            points,
+            question_score
+        FROM
+            choice_question c
+            JOIN question q ON c.question_id = q.id
+        WHERE
+            user_name = #{userName}
+        and c.paper_id is null
+        ORDER BY
+            order_num
+    </select>
+    <delete id="deleteQuestionById" parameterType="int" >
+        DELETE
+        FROM
+            choice_question
+        WHERE
+            question_id = #{questionId}
+    </delete>
+
+<!--添加页面的条件筛选-->
+    <select id="selectByCondition" parameterType="com.tt.wkkt.vo.req.ChoiceByConditionReqVO" resultType="com.tt.wkkt.vo.resp.QuestionRespVO">
+        SELECT
+        id,
+        question,
+        items,
+        answer,
+        type,
+        degree,
+        points,
+        user_name,
+        question_score
+        FROM
+        question
+        WHERE
+        user_name = #{userName}
+        <if test="degree != null">
+            AND degree = #{degree}
+        </if>
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+        <if test="points != ''">
+            AND points LIKE "%"#{points}"%"
+        </if>
+        ORDER BY
+        id DESC
+    </select>
+
+
+    <!--根据id获得问题-->
+    <select id="selectQuestionById" resultType="com.tt.wkkt.vo.resp.QuestionRespVO" parameterType="int">
+        SELECT
+            id,
+            question,
+            items,
+            answer,
+            type,
+            degree,
+            points,
+            user_name,
+            question_score
+        FROM
+            question
+        WHERE
+            id = #{id}
+    </select>
+
+
+    <!--paper_id为空，还没有添加进试卷里面-->
+    <select id="selectCountNotAdd" resultType="int">
+        SELECT
+            COUNT( id )
+        FROM
+            choice_question
+        WHERE
+            paper_id IS NULL
+    </select>
+
+
+    <!--关闭页面或者退出页面的时候，则删除所有没有试卷id的题目-->
+    <delete id="deleteAllNotPaperid">
+        DELETE
+        FROM
+            choice_question
+        WHERE
+            paper_id IS NULL
+    </delete>
+</mapper>

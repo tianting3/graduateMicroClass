@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.FileExportMapper">
+
+<select id="selectAllGrade" resultType="com.tt.wkkt.model.StudentGrade" parameterType="int">
+    SELECT
+        id,
+        student_user,
+        competitive_grade,
+        exam_grade,
+        course_id,
+        course_name,
+        teacher_user
+    FROM
+        student_grade
+    WHERE
+        course_id = #{courseId}
+</select>
+</mapper>

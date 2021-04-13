@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.ManageQuestionMapper">
+
+    <select id="selectAllByuserName" parameterType="com.tt.wkkt.vo.req.PartQuestionReqVO" resultType="com.tt.wkkt.vo.resp.QuestionRespVO">
+                SELECT
+            id,
+            question,
+            items,
+            answer,
+            type,
+            degree,
+            points,
+            user_name,
+            question_score
+        FROM
+            question
+        WHERE
+            user_name = #{userName}
+        <if test="degree != null">
+            AND degree = #{degree}
+        </if>
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+        ORDER BY
+            id DESC
+    </select>
+
+    <!--<select id="selectPageByuserName" parameterType="string" resultType="com.tt.wkkt.vo.resp.QuestionRespVO">
+        SELECT
+        id,
+        question,
+        items,
+        answer,
+        type,
+        degree,
+        points,
+        user_name
+        FROM
+        question
+        WHERE
+        user_name = #{userName}
+        <if test="degree != null">
+            AND degree = #{degree}
+        </if>
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+        ORDER BY
+        id DESC
+    </select>-->
+
+    <delete id="deleteById" parameterType="int">
+                DELETE
+        FROM
+            question
+        WHERE
+            id = #{id}
+    </delete>
+
+
+    <insert id="addQuestion" parameterType="com.tt.wkkt.model.Question">
+            INSERT INTO question ( question, items, answer, type, degree, points, user_name,question_score )
+        VALUES
+            ( #{question},#{items},#{answer},#{type},#{degree},#{points},#{userName},#{questionScore})
+    </insert>
+
+    <select id="selectById" resultType="com.tt.wkkt.model.Question" parameterType="int">
+            SELECT
+                id,
+                question,
+                items,
+                answer,
+                type,
+                degree,
+                points,
+                user_name,
+                question_score
+            FROM
+                question
+            WHERE
+                id =#{id}
+    </select>
+
+    <update id="updateById" parameterType="com.tt.wkkt.model.Question" >
+        UPDATE question
+            SET question = #{question},
+            question_score=#{questionScore},
+            items = #{items},
+            answer = #{answer},
+            type = #{type},
+            degree = #{degree},
+            points = #{points}
+            WHERE
+                id = #{id}
+
+    </update>
+
+    <select id="selectByTypeOrDegree" resultType="com.tt.wkkt.model.Question" parameterType="com.tt.wkkt.vo.req.PartQuestionReqVO">
+        SELECT
+            id,question,items,answer,type,degree,points,user_name,question_score
+        FROM
+            question
+        WHERE
+        user_name = #{userName}
+        <if test="degree != null">
+            AND degree = #{degree}
+        </if>
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+
+    </select>
+
+    <delete id="deleteManyById" parameterType="list">
+        delete from  question where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

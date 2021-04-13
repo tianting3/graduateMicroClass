@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.StudentPaperMapper">
+    <select id="queryAllPaperByTeachername" parameterType="string" resultType="com.tt.wkkt.model.IssuePaper">
+        SELECT
+            id,
+            paper_id,
+            test_name,
+            test_time,
+            degree,
+            teacher_name,
+            score,
+            issue_time
+        FROM
+            issue_paper
+        WHERE
+            teacher_name = #{teacherName}
+            order by issue_time desc
+    </select>
+
+
+</mapper>
