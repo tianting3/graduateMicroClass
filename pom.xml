@@ -118,7 +118,7 @@
         </dependency>
 
 
-        <!--HuTool工具类-->
+        <!--Hutool工具类-->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
