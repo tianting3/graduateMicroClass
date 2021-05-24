@@ -119,4 +119,17 @@
             #{item}
         </foreach>
     </delete>
+
+    <select id="queryByQuestionsId" parameterType="list" resultType="com.tt.wkkt.model.Question">
+        SELECT
+            id,question,items,answer,type,degree,points,user_name,question_score
+        FROM
+            question
+        WHERE
+            id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by id
+    </select>
 </mapper>

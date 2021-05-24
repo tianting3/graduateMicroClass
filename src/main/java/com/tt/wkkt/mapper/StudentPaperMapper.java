@@ -1,6 +1,9 @@
 package com.tt.wkkt.mapper;
 
 import com.tt.wkkt.model.IssuePaper;
+import com.tt.wkkt.model.ShowReviewQuestion;
+import com.tt.wkkt.vo.req.RemarkPaperReqVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,5 +15,11 @@ import java.util.List;
  **/
 public interface StudentPaperMapper {
     List<IssuePaper> queryAllPaperByTeachername(String teacherName);
+
+    int queryExistSubmit(@Param("paperId")int paperId,@Param("studentUser")String studentUser);
+
+    int queryIdByStudentUserAndPaperId(RemarkPaperReqVO remarkPaperReqVO);
+
+    List<ShowReviewQuestion> queryReviewQuestionByReviewId(int reviewId);
 
 }

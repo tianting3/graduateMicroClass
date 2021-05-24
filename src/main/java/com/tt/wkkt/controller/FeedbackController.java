@@ -1,5 +1,6 @@
 package com.tt.wkkt.controller;
 
+import com.tt.wkkt.common.DateUtil;
 import com.tt.wkkt.common.Result;
 import com.tt.wkkt.common.ResultCode;
 import com.tt.wkkt.model.AskQuestion;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.tt.wkkt.common.ResultCode.*;
@@ -70,14 +74,58 @@ public class FeedbackController {
         }
     }
 
+    /*学生发送意见反馈给老师*/
+    @RequestMapping(value = "/proposeToTeacher",method = RequestMethod.POST)
+    public Result proposeToTeacher(@RequestBody FeedbackReqVo feedbackReqVo, HttpSession session){
+        Result result=new Result();
+        try{
+            System.out.println(session.getAttribute("userName"));
+            String userName=(String)session.getAttribute("userName");
+            feedbackReqVo.setUserName(userName);
+            String way=feedbackReqVo.getWay();
+            String tpro=feedbackReqVo.gettPropose();
+
+            String atmo=feedbackReqVo.getAtmosphere();
+            if (way.equals("0")||tpro.equals("")||atmo.equals("0")){
+                result.setCode(NOPARAMETER.getCode());
+                result.setMsg(NOPARAMETER.getMsg());
+                return result;
+            }
+            boolean re=feedbackService.studentFeedback(feedbackReqVo);/*是否添加成功*/
+            if (re==true) {
+                System.out.println("成功插入");
+                webSocket.sendMessage("收到一条反馈");
+            }else{
+                System.out.println("插入失败");
+            }
+
+            result.setCode(OK.getCode());
+            result.setMsg(OK.getMsg());
+            System.out.println("成功");
+
+            return result;
+        }catch (Exception e){
+            result.setCode(ERROR.getCode());
+            result.setMsg(ERROR.getMsg());
+            return result;
+        }
+    }
+
 
 
     /*老师获得反馈信息*/
-    @RequestMapping("/getFeedback")
-    public Result getFeedback(){
+    @RequestMapping(value = "/getFeedback",method = RequestMethod.GET)
+    public Result getFeedback(HttpSession session){
         Result result=new Result();
         try{
-            List<GetFeedbackRespVO> respVO=feedbackService.techerFeedBack();
+            String teacherUser=(String)session.getAttribute("userName");
+            List<GetFeedbackRespVO> respVO=feedbackService.techerFeedBack(teacherUser);
+            for (GetFeedbackRespVO feedbackRespVO:respVO){
+
+                String time = DateUtil.getYyyyMmDdHhMmSs(feedbackRespVO.getTime());
+                feedbackRespVO.setFormatDate(time);
+
+            }
             result.setData(respVO);
             result.setCode(OK.getCode());
             result.setMsg(OK.getMsg());
@@ -91,6 +139,22 @@ public class FeedbackController {
 
 
 
+    /*获得对微课堂的反馈信息*/
+//    @RequestMapping("/getFeedbackForMicro")
+//    public Result getFeedbackForMicro(){
+//        Result result=new Result();
+//        try{
+//            List<GetFeedbackRespVO> respVO=feedbackService.techerFeedBack();
+//            result.setData(respVO);
+//            result.setCode(OK.getCode());
+//            result.setMsg(OK.getMsg());
+//            return result;
+//        }catch (Exception e){
+//            result.setCode(ERROR.getCode());
+//            result.setMsg(ERROR.getMsg());
+//            return result;
+//        }
+//    }
 
     /*学生提问*/
     @RequestMapping(value = "/studentAsk",method = RequestMethod.POST)

@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface StudentRecordMapper {
 
     /*根据课程id查询总的课程抢答分*/
-    int queryAllComptitiveGradeByCourseId(@Param("courseId")int courseId);
+    int queryAllComptitiveGradeByCourseId(@Param("courseId")int courseId,@Param("studentUser")String studentUser);
 }

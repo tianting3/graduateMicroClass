@@ -20,7 +20,7 @@ public interface FeedbackService {
     /*学生反馈*/
     boolean studentFeedback (FeedbackReqVo feedbackReqVo);
 
-    List<GetFeedbackRespVO> techerFeedBack();
+    List<GetFeedbackRespVO> techerFeedBack(String teacherUser);
 
     boolean studentAsk(AskQuestion askQuestion);
 

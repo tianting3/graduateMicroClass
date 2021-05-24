@@ -233,15 +233,12 @@ public class ManageQuestionController {
                 }else{
                     question.setType("5");
                 }
-                boolean re=manageQuestionService.updateById(question);
-                result.setData(re);
-                result.setCode(OK.getCode());
-                result.setMsg(OK.getMsg());
-                return result;
-            }
 
-            result.setCode(NOPARAMETER.getCode());
-            result.setMsg(NOPARAMETER.getMsg());
+            }
+            boolean re=manageQuestionService.updateById(question);
+            result.setData(re);
+            result.setCode(OK.getCode());
+            result.setMsg(OK.getMsg());
             return result;
         }catch (Exception e){
             result.setCode(ERROR.getCode());

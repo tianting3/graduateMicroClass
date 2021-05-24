@@ -4,6 +4,7 @@ import com.tt.wkkt.model.AskQuestion;
 import com.tt.wkkt.model.StudentGrade;
 import com.tt.wkkt.vo.req.FeedbackReqVo;
 import com.tt.wkkt.vo.resp.GetFeedbackRespVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public interface FeedbackMapper {
     boolean insertFeedback(FeedbackReqVo feedbackReqVo);
 
-    List<GetFeedbackRespVO> selectFeedback();
+    List<GetFeedbackRespVO> selectFeedbackTeacher(String teacherUser);
 
     boolean addAskQues(AskQuestion askQuestion);
 
@@ -31,4 +32,9 @@ public interface FeedbackMapper {
     StudentGrade queryCourseIdAndNameByUsername(String teacherUser);
 
     boolean insertCompetitiveGrade(StudentGrade studentGrade);
+
+    List<String> queryAllStudentuserByCourseId(int courseId);
+
+    boolean updateCompetitveGrade(@Param("competitiveGrade")int competitiveGrade,@Param("studentUser") String studentUser);
+
 }

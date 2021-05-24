@@ -16,4 +16,14 @@
     WHERE
         course_id = #{courseId}
 </select>
+
+    <select id="selectCourseId" resultType="int" parameterType="string">
+        SELECT
+            id
+        FROM
+            course
+        WHERE
+            teacher_id = ( SELECT id FROM teacher WHERE user_name = #{userName} )
+    </select>
+
 </mapper>

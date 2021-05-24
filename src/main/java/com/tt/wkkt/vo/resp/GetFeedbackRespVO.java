@@ -25,6 +25,26 @@ public class GetFeedbackRespVO {
 
     private Date time;
 
+    private String formatDate;
+
+    private String coursePropose;
+
+    public String getFormatDate() {
+        return formatDate;
+    }
+
+    public void setFormatDate(String formatDate) {
+        this.formatDate = formatDate;
+    }
+
+    public String getCoursePropose() {
+        return coursePropose;
+    }
+
+    public void setCoursePropose(String coursePropose) {
+        this.coursePropose = coursePropose;
+    }
+
     public int getId() {
         return id;
     }

@@ -7,4 +7,49 @@ select student_name,id,user_name,password from student where user_name=#{userNam
 <select id="checkTeacher" resultType="com.tt.wkkt.model.Teacher">
     select teacher_name,id,user_name,password from teacher where user_name=#{userName} and password=#{password}
 </select>
+
+
+    <select id="queryStudentNameByUsername" parameterType="string" resultType="string">
+        SELECT
+            student_name
+        FROM
+            student
+        WHERE
+            user_name = #{userName}
+    </select>
+
+    <select id="queryteacherNameByUsername" parameterType="string" resultType="string">
+        SELECT
+            teacher_name
+        FROM
+            teacher
+        WHERE
+            user_name = #{userName}
+    </select>
+
+    <insert id="registerStudent" parameterType="com.tt.wkkt.model.Student">
+        INSERT INTO student ( student_name, user_name, `password` )
+        VALUES
+            ( #{studentName}, #{userName}, #{password} )
+    </insert>
+
+    <insert id="registerTeacher" parameterType="com.tt.wkkt.model.Teacher">
+        INSERT INTO teacher ( teacher_name, user_name, `password` )
+        VALUES
+            ( #{teacherName}, #{userName}, #{password} )
+    </insert>
+
+    <select id="queryAllStudentUsername" resultType="string">
+        SELECT
+            user_name
+        FROM
+            student
+    </select>
+
+    <select id="queryAllTeacherUsername" resultType="string">
+        SELECT
+            user_name
+        FROM
+            teacher
+    </select>
 </mapper>

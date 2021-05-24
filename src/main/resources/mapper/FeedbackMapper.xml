@@ -3,32 +3,35 @@
 <mapper namespace="com.tt.wkkt.mapper.FeedbackMapper">
 
     <insert id="insertFeedback" parameterType="com.tt.wkkt.vo.req.FeedbackReqVo">
-            INSERT INTO feedback ( user_name, t_propose, w_propose, feedback, way, atmosphere,time )
+            INSERT INTO feedback ( user_name, t_propose, way, atmosphere,time,teacher_user,course_propose,status )
     VALUES
-        (#{userName},#{tPropose},#{wPropose},#{feedback},#{way},#{atmosphere},now())
+        (#{userName},#{tPropose},#{way},#{atmosphere},now(),#{teacherUser},#{coursePropose},1)
         </insert>
 
-    <select id="selectFeedback" resultType="com.tt.wkkt.vo.resp.GetFeedbackRespVO">
+    <select id="selectFeedbackTeacher" resultType="com.tt.wkkt.vo.resp.GetFeedbackRespVO">
                 SELECT
             id,
             user_name,
             t_propose,
-            w_propose,
-            feedback,
+            course_propose,
             way,
             atmosphere,
+
             time
         FROM
             feedback
+            where status=1
+            and
+            teacher_user=#{String teacherUser}
         ORDER BY
             time DESC
     </select>
 
     <!--添加提问-->
     <insert id="addAskQues" parameterType="com.tt.wkkt.model.AskQuestion">
-            INSERT INTO ask_question ( user_name, teacher_name, ask_question,time )
+            INSERT INTO ask_question ( user_name, teacher_name, ask_question,time,reply )
         VALUES
-            ( #{userName}, #{teacherName}, #{askQuestion},#{time} )
+            ( #{userName}, #{teacherName}, #{askQuestion},#{time},0 )
     </insert>
 
     <select id="getAskQuestionByTeacherName" parameterType="string" resultType="com.tt.wkkt.model.AskQuestion">
@@ -76,7 +79,7 @@
         FROM
             course
         WHERE
-            teacher_id = ( SELECT id FROM teacher WHERE user_name = 'zhangwang' )
+            teacher_id = ( SELECT id FROM teacher WHERE user_name = #{teacherUser} )
     </select>
 
     <insert id="insertCompetitiveGrade" parameterType="com.tt.wkkt.model.StudentGrade" >
@@ -85,4 +88,19 @@
             ( #{studentUser}, #{competitiveGrade},#{courseId},#{courseName},#{teacherUser} )
     </insert>
     
+    <select id="queryAllStudentuserByCourseId" resultType="string" parameterType="int">
+        SELECT
+            student_user
+        FROM
+            student_grade
+        WHERE course_id=#{courseId}
+    </select>
+
+
+    <update id="updateCompetitveGrade" >
+        UPDATE student_grade
+        SET competitive_grade = #{competitiveGrade}
+        WHERE
+            student_user = #{studentUser}
+    </update>
 </mapper>

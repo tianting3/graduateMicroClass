@@ -13,4 +13,6 @@ import java.util.List;
 public interface FileExportMapper {
 
     List<StudentGrade> selectAllGrade(int courseId);
+
+    int selectCourseId(String userName);
 }

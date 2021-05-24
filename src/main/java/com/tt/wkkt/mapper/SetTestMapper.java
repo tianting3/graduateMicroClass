@@ -6,6 +6,7 @@ import com.tt.wkkt.vo.req.ChoiceQuestionReqVO;
 import com.tt.wkkt.vo.resp.QuestionRespVO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +25,10 @@ public interface SetTestMapper {
 
     boolean insertPaper(TestPaper testPaper);
 
+    TestPaper queryByPaperId(int paperId);
+
+    List<TestPaper> queryByPaperIds(List paperIds);
+
     int queryIdByPaperName(String testName);
 
     List<String> queryAllTestName();
@@ -41,4 +46,6 @@ public interface SetTestMapper {
     List<ChangeQues> selectquestionById(List ids);//查询问题 将items变成数组
 
     int getTimeByPaperId(int id);
+
+    boolean removeIssuePaper(int paperId);
 }

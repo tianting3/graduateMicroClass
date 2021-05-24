@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tt.wkkt.mapper.StudentSendPaperMapper">
+
+
+    <insert id="insertReviewPaper" parameterType="com.tt.wkkt.model.ReviewPaper">
+        INSERT INTO review_paper ( paper_id, student_user, teacher_user, paper_name, total_grade, status, type,upload_time )
+        VALUES
+            ( #{paperId}, #{studentUser}, #{teacherUser}, #{paperName}, #{totalGrade}, #{status}, #{type},#{uploadTime} )
+    </insert>
+
+    <select id="queryPaperIdByTeacherUser" parameterType="string" resultType="int">
+        SELECT paper_id from review_paper where teacher_user=#{teacherUser} GROUP BY paper_id
+    </select>
+    
+    
+    <select id="queryBypaperIdAndStatus" parameterType="int" resultType="com.tt.wkkt.model.ReviewPaper">
+        SELECT
+            student_user,
+            paper_name,
+            total_grade
+        FROM
+            review_paper
+        WHERE
+            STATUS = 1
+            AND paper_id = #{paperId}
+    </select>
+
+
+    <select id="queryAllReviewPaperByPaperId"  resultType="com.tt.wkkt.vo.resp.ReviewPaperRespVO">
+        SELECT
+            id,
+            student_user,
+            teacher_user,
+            paper_name,
+            total_grade,
+            STATUS,
+            type,
+            upload_time
+        FROM
+            review_paper
+        WHERE
+            paper_id = #{paperId}
+            AND teacher_user = #{teacherUser}
+        ORDER BY
+            status,upload_time
+
+    </select>
+
+
+    <insert id="insertReviewQuestion" parameterType="com.tt.wkkt.model.ShowReviewQuestion">
+        INSERT INTO show_review_question ( review_id, question_id, upload_answer )
+        VALUES
+            (#{reviewId},#{questionId},#{uploadAnswer} )
+    </insert>
+</mapper>

@@ -4,7 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tt.wkkt.common.Result;
 import com.tt.wkkt.mapper.SetTestMapper;
+import com.tt.wkkt.mapper.StudentPaperMapper;
 import com.tt.wkkt.model.ChangeQues;
+import com.tt.wkkt.model.IssuePaper;
 import com.tt.wkkt.model.TestPaper;
 import com.tt.wkkt.service.SetTestService;
 import com.tt.wkkt.service.WebSocket;
@@ -30,6 +32,9 @@ import static com.tt.wkkt.common.ResultCode.OK;
 public class SetTestServiceImpl implements SetTestService {
     @Autowired
     SetTestMapper setTestMapper;
+
+    @Autowired
+    StudentPaperMapper studentPaperMapper;
 
     @Override
     public HashMap<String, Object> getAllScoreAndTestCount(String techerName) {
@@ -83,9 +88,36 @@ public class SetTestServiceImpl implements SetTestService {
     }
 
     @Override
+    public boolean judgeCanResponse(String studentUser, int paperId) {
+        int isExist = studentPaperMapper.queryExistSubmit(paperId, studentUser);
+
+        if (isExist<=0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    @Override
+    public HashMap<String, Object> getIssuedPaper(String teacherName, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<IssuePaper> list = studentPaperMapper.queryAllPaperByTeachername(teacherName);
+        PageInfo<IssuePaper> info = new PageInfo<>(list);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", info.getList());/*返回指定页面的数据*/
+        map.put("nowPage", pageNum);/*返回当前页面*/
+        map.put("total", ((int) info.getTotal() + pageSize - 1) / pageSize);//返回总页面数
+        map.put("size", info.getTotal());
+
+        return map;
+    }
+
+    @Override
     public boolean removePaper(int id) {
         boolean deleteChoiceTestByPaperId = setTestMapper.deleteChoiceTestByPaperId(id);
         if (deleteChoiceTestByPaperId == true) {
+            setTestMapper.removeIssuePaper(id);
             return setTestMapper.deletePaperById(id);
 
         }
@@ -157,8 +189,11 @@ public class SetTestServiceImpl implements SetTestService {
                 }else{
                     question.setType("讨论题");
                 }
-                    String[] item = question.getItems().split(" ");
-                question.setItemsArr(item);
+                if (question.getType().equals("单选题")||question.getType().equals("多选题")||question.getType().equals("判断题")){
+                    String[] item = question.getItems().split("@");
+                    question.setItemsArr(item);
+                }
+
             }
             map.put("data",list);
         }

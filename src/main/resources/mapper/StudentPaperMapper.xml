@@ -18,5 +18,23 @@
             order by issue_time desc
     </select>
 
+    <select id="queryExistSubmit" resultType="int" >
+    SELECT count(*) from review_paper where paper_id=#{paperId} and student_user=#{studentUser}
+    </select>
 
+    <select id="queryIdByStudentUserAndPaperId" resultType="int" parameterType="com.tt.wkkt.vo.req.RemarkPaperReqVO">
+        SELECT id from review_paper where paper_name=#{paperName} and student_user=#{studentUser}
+    </select>
+
+    <select id="queryReviewQuestionByReviewId" resultType="com.tt.wkkt.model.ShowReviewQuestion" parameterType="int">
+        SELECT
+            review_id,
+            question_id,
+            upload_answer
+        FROM
+            show_review_question
+        WHERE
+            review_id = #{reviewId}
+        order by question_id
+    </select>
 </mapper>

@@ -27,4 +27,6 @@ public interface ManageQuestionMapper {
     List<Question> selectByTypeOrDegree(PartQuestionReqVO partQuestionReqVO);
 
     boolean deleteManyById(List ids);
+
+    List<Question> queryByQuestionsId(List questionId);
 }

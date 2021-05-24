@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 import static com.tt.wkkt.common.ResultCode.OK;
@@ -72,6 +73,41 @@ public class SetTestController {
             HashMap<String, Object> map = setTestService.getAllPaper(teacherName, pageNum, pageSize);
             result.setData(map);
             result.setMsg("查询所有试卷成功");
+            result.setCode(OK.getCode());
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.error("查询所有试卷失败");
+        }
+    }
+
+/*查询是否可以答题，*/
+    @RequestMapping(value = "/judgeResponse",method = RequestMethod.POST)
+    public Result judgeResponse(HttpSession session,@RequestParam("paperId") int  paperId){
+        Result result = new Result<>();
+        try{
+            String user = (String)session.getAttribute("userName");
+            boolean response = setTestService.judgeCanResponse(user, paperId);
+            if (!response){
+                result.setMsg("已经提交过试卷");
+            }
+            result.setData(response);
+            result.setCode(OK.getCode());
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.error("系统错误");
+        }
+    }
+    /*查询所有已发布试题*/
+    @RequestMapping(value = "/issuedPaper",method = RequestMethod.POST)
+    public Result issuedPaper(HttpSession session, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize){
+        try{
+            Result result = new Result<>();
+            String userName=(String)session.getAttribute("userName");
+            HashMap<String, Object> map = setTestService.getIssuedPaper(userName, pageNum, pageSize);
+            result.setData(map);
+            result.setMsg("查询所有已发布试卷成功");
             result.setCode(OK.getCode());
             return result;
         }catch (Exception e){

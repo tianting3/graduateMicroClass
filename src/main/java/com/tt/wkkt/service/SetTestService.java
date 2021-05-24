@@ -19,6 +19,10 @@ public interface SetTestService {
 
     HashMap<String, Object> getAllPaper(String teacherName,Integer pageNum, Integer pageSize);
 
+    boolean judgeCanResponse(String studentUser,int paperId);
+
+    HashMap<String, Object> getIssuedPaper(String teacherName,Integer pageNum, Integer pageSize);
+
     boolean removePaper(int id);
 
     boolean updatePaper(TestPaper testPaper);

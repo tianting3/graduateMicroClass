@@ -19,6 +19,27 @@ public class FeedbackReqVo {
     private String way;
 
     private String atmosphere;
+
+    private String coursePropose;
+
+    private String teacherUser;
+
+    public String getCoursePropose() {
+        return coursePropose;
+    }
+
+    public void setCoursePropose(String coursePropose) {
+        this.coursePropose = coursePropose;
+    }
+
+    public String getTeacherUser() {
+        return teacherUser;
+    }
+
+    public void setTeacherUser(String teacherUser) {
+        this.teacherUser = teacherUser;
+    }
+
     public String getUserName() {
         return userName;
     }

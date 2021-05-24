@@ -2,6 +2,8 @@ package com.tt.wkkt.service.impl;
 
 import com.tt.wkkt.common.DateUtil;
 import com.tt.wkkt.mapper.FeedbackMapper;
+import com.tt.wkkt.mapper.LoginMapper;
+import com.tt.wkkt.mapper.StudentRecordMapper;
 import com.tt.wkkt.model.AskQuestion;
 import com.tt.wkkt.model.StudentGrade;
 import com.tt.wkkt.service.FeedbackService;
@@ -24,6 +26,13 @@ public class FeedbackDerviceImpl implements FeedbackService {
 
     @Autowired
     FeedbackMapper feedbackMapper;
+
+    @Autowired
+    LoginMapper loginMapper;
+
+    @Autowired
+    StudentRecordMapper studentRecordMapper;
+
     @Override
     public boolean studentFeedback(FeedbackReqVo feedbackReqVo) {
         boolean res=feedbackMapper.insertFeedback(feedbackReqVo);
@@ -31,8 +40,8 @@ public class FeedbackDerviceImpl implements FeedbackService {
     }
 
     @Override
-    public List<GetFeedbackRespVO> techerFeedBack() {
-        List<GetFeedbackRespVO> respVO=feedbackMapper.selectFeedback();
+    public List<GetFeedbackRespVO> techerFeedBack(String teacherUser) {
+        List<GetFeedbackRespVO> respVO=feedbackMapper.selectFeedbackTeacher(teacherUser);
         return respVO;
     }
 
@@ -42,6 +51,7 @@ public class FeedbackDerviceImpl implements FeedbackService {
         Date date = new Date();
         String time = DateUtil.getYyyyMmDdHhMmSs(date);
         askQuestion.setTime(time);
+
         boolean addAskQues = feedbackMapper.addAskQues(askQuestion);
         return addAskQues;
     }
@@ -67,11 +77,25 @@ public class FeedbackDerviceImpl implements FeedbackService {
 
     @Override
     public boolean GradeToStudent(StudentGrade student) {
-
+/*
+        String studentName = loginMapper.queryStudentNameByUsername(student.getStudentUser());
+        String teacherName = loginMapper.queryteacherNameByUsername(student.getTeacherUser());
+        student.setStudentUser(studentName);
+        student.setTeacherUser(teacherName);*/
         StudentGrade queryCourseIdAndNameByUsername = feedbackMapper.queryCourseIdAndNameByUsername(student.getTeacherUser());
         student.setCourseId(queryCourseIdAndNameByUsername.getCourseId());
         student.setCourseName(queryCourseIdAndNameByUsername.getCourseName());
-        boolean competitiveGrade = feedbackMapper.insertCompetitiveGrade(student);
-        return competitiveGrade;
+        List<String> studentuser = feedbackMapper.queryAllStudentuserByCourseId(student.getCourseId());
+        System.out.println(studentuser);
+        if (!studentuser.contains(student.getStudentUser())){
+            boolean competitiveGrade = feedbackMapper.insertCompetitiveGrade(student);
+            return competitiveGrade;
+        }else {
+            int allCompetiveGrade = studentRecordMapper.queryAllComptitiveGradeByCourseId(student.getCourseId(), student.getStudentUser());
+            student.setCompetitiveGrade(student.getCompetitiveGrade()+allCompetiveGrade);
+            boolean b = feedbackMapper.updateCompetitveGrade(student.getCompetitiveGrade(), student.getStudentUser());
+            return b;
+        }
+
     }
 }

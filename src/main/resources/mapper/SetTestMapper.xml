@@ -40,6 +40,17 @@
         VALUES
             ( #{testName},#{number},#{score},#{testTime},#{degree},#{teacherName})
     </insert>
+
+    <select id="queryByPaperId" parameterType="int" resultType="com.tt.wkkt.model.TestPaper">
+        select  id,test_name, number, score, test_time, degree,teacher_name from test_paper where id=#{paperId}
+    </select>
+
+    <select id="queryByPaperIds" parameterType="int" resultType="com.tt.wkkt.model.TestPaper">
+        select  id,test_name, number, score, test_time, degree,teacher_name from test_paper where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+         #{item}
+        </foreach>
+    </select>
     
     <!--查询试卷的id-->
     <select id="queryIdByPaperName" parameterType="string" resultType="int">
@@ -169,4 +180,8 @@
         WHERE
             paper_id = #{id}
     </select>
+
+    <delete id="removeIssuePaper" parameterType="int">
+        delete from issue_paper where paper_id=#{paperId}
+    </delete>
 </mapper>

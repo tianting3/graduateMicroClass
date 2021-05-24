@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static com.tt.wkkt.common.ResultCode.ERROR;
+
 /**
  * @Author tianting
  * @Description
@@ -72,5 +74,25 @@ public class LoginController {
             return response;
         }
    }
+
+
+    @RequestMapping(value = "/doRegister",method = RequestMethod.POST)
+
+    public Result doRegister( String userName, String new_password, String old_password, int role,String name){
+        Result result = new Result();
+        try {
+            if (userName.equals(null)||new_password.equals(null)||old_password.equals(null)||name.equals(null)||
+                    userName.equals("")||new_password.equals("")||old_password.equals("")||name.equals("")){
+                result.setCode(ERROR.getCode());
+                result.setMsg("请检查注册信息，不能为空");
+                return result;
+            }
+            return  loginService.register(userName, new_password, old_password, role,name);
+        }catch (Exception e){
+            result.setCode(ERROR.getCode());
+            result.setMsg("注册失败");
+            return result;
+        }
+    }
 
 }
