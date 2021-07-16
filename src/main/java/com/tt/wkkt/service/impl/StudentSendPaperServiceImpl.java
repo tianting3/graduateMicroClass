@@ -171,9 +171,35 @@ public class StudentSendPaperServiceImpl implements StudentSendPaperService {
             }
 
         }
+        int totalGrade = studentPaperMapper.queryTotalGradeByStudentUserAndPaperId(remarkPaperReqVO);
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("question",changeQues);
         hashMap.put("answer",showReviewQuestionRespVOS);
+        hashMap.put("totalGrade",totalGrade);
         return hashMap;
+    }
+
+    @Override
+    public Result insertIncludeObjective(Map<String, Object> map) {
+        Result result = new Result<>();
+        HashMap objetctiveMap = JSON.parseObject(map.get("objective") +"", HashMap.class);
+        int totalGrade = returnTotalGrade(objetctiveMap);
+        HashMap<String,Object> subjective = JSON.parseObject(map.get("map") + "", HashMap.class);
+        for (Map.Entry<String,Object> entry:subjective.entrySet()){
+            int value = Integer.parseInt((String) entry.getValue());
+            totalGrade=totalGrade+value;
+        }
+        String paperName = map.get("paperName").toString();
+        String studentUser = map.get("studentUser").toString();
+        boolean updateGrade = studentSendPaperMapper.updateTotalByPaperNameAndStudentUser(paperName, studentUser, totalGrade);
+        if (updateGrade){
+            result.setCode(OK.getCode());
+            result.setMsg("评分成功");
+            return result;
+        }else {
+            result.setCode(ERROR.getCode());
+            result.setMsg("评分失败");
+            return result;
+        }
     }
 }

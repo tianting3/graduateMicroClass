@@ -26,4 +26,6 @@ public interface StudentSendPaperMapper {
     ArrayList<ReviewPaperRespVO> queryAllReviewPaperByPaperId(@Param("paperId") int paperId, @Param("teacherUser")String teacherUser);
 
     boolean insertReviewQuestion(ShowReviewQuestion reviewQuestion);
+
+    boolean updateTotalByPaperNameAndStudentUser(@Param("paperName") String paperName,@Param("studentUser")String studentUser,@Param("totalGrade")int totalGrade);
 }

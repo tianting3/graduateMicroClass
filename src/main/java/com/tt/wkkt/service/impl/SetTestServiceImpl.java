@@ -10,7 +10,9 @@ import com.tt.wkkt.model.IssuePaper;
 import com.tt.wkkt.model.TestPaper;
 import com.tt.wkkt.service.SetTestService;
 import com.tt.wkkt.service.WebSocket;
+import com.tt.wkkt.util.KsBeanUtil;
 import com.tt.wkkt.vo.req.ChoiceQuestionReqVO;
+import com.tt.wkkt.vo.resp.IssuePaperNoIDReqVO;
 import com.tt.wkkt.vo.resp.QuestionRespVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -126,7 +128,12 @@ public class SetTestServiceImpl implements SetTestService {
 
     @Override
     public boolean updatePaper(TestPaper testPaper) {
-        return setTestMapper.updatePaperById(testPaper);
+        IssuePaperNoIDReqVO issuePaper = KsBeanUtil.copyPropertiesThird(testPaper, IssuePaperNoIDReqVO.class);
+        issuePaper.setPaperId(testPaper.getId());
+        if (setTestMapper.updateIssueNameByPaperId(issuePaper)){
+            return setTestMapper.updatePaperById(testPaper);
+        }
+        return false;
     }
 
     @Override

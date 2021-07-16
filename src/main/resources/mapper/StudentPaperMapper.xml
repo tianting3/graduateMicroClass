@@ -37,4 +37,8 @@
             review_id = #{reviewId}
         order by question_id
     </select>
+
+    <select id="queryTotalGradeByStudentUserAndPaperId" resultType="int" parameterType="com.tt.wkkt.vo.req.RemarkPaperReqVO">
+        SELECT total_grade from review_paper where paper_name=#{paperName} and student_user=#{studentUser}
+    </select>
 </mapper>

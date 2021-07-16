@@ -53,4 +53,13 @@
         VALUES
             (#{reviewId},#{questionId},#{uploadAnswer} )
     </insert>
+
+
+    <update id="updateTotalByPaperNameAndStudentUser" >
+        UPDATE review_paper
+        SET total_grade = #{totalGrade}
+        WHERE
+            student_user = #{studentUser}
+            AND paper_name = #{paperName}
+    </update>
 </mapper>

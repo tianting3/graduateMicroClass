@@ -79,4 +79,17 @@ public class StudentSendPaperController {
     }
 
 
+    @RequestMapping("/studentSubmitScore")
+    public Result studentSubmitScore(@RequestBody Map<String,Object> map , HttpSession session){
+        Result result = new Result<>();
+        try{
+            return  studentSendPaperService.insertIncludeObjective(map);
+        }catch (Exception e){
+            result.setMsg("系统出错");
+            result.setCode(ERROR.getCode());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }

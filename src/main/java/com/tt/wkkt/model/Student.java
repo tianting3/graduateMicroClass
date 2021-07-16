@@ -1,56 +1,34 @@
 package com.tt.wkkt.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * @Author tianting
  * @Description
  * @Param
  * @return
  **/
-public class Student {
-    private  String studentName;
-    private String userName;
-    private String password;
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "student")
+public class Student implements Serializable {
+    @Id/*主键*/
+    @GeneratedValue(strategy= GenerationType.IDENTITY)/*自增*/
+    @Column(name = "id")
     private int id;
+    @Column(name = "student_name")
+    private  String studentName;
+    @Column(name = "user_name")
+    private String userName;
+    @Column(name = "password")
+    private String password;
 
-    public String getStudentName() {
-        return studentName;
-    }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "studentName='" + studentName + '\'' +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", id=" + id +
-                '}';
-    }
 }

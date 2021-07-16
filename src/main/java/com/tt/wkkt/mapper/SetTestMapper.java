@@ -1,8 +1,10 @@
 package com.tt.wkkt.mapper;
 
 import com.tt.wkkt.model.ChangeQues;
+import com.tt.wkkt.model.IssuePaper;
 import com.tt.wkkt.model.TestPaper;
 import com.tt.wkkt.vo.req.ChoiceQuestionReqVO;
+import com.tt.wkkt.vo.resp.IssuePaperNoIDReqVO;
 import com.tt.wkkt.vo.resp.QuestionRespVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,6 +41,8 @@ public interface SetTestMapper {
     boolean deleteChoiceTestByPaperId(int id);
     boolean updatePaperById(TestPaper testPaper);
 
+    boolean updateIssueNameByPaperId(IssuePaperNoIDReqVO issuePaperNoIDReqVO);
+
     List<Integer> selectAllTestByPaperId(int id);
 
     List<QuestionRespVO> selectAllquestionById(List ids);
@@ -48,4 +52,6 @@ public interface SetTestMapper {
     int getTimeByPaperId(int id);
 
     boolean removeIssuePaper(int paperId);
+
+
 }

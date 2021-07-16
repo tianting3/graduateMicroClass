@@ -22,4 +22,6 @@ public interface StudentPaperMapper {
 
     List<ShowReviewQuestion> queryReviewQuestionByReviewId(int reviewId);
 
+    int queryTotalGradeByStudentUserAndPaperId(RemarkPaperReqVO remarkPaperReqVO);
+
 }

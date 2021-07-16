@@ -25,4 +25,6 @@ public interface StudentSendPaperService {
     HashMap<String,Object> allReviewPaperByPaperId(int paperId, HttpSession session, Integer pageNum, Integer pageSize);
 
     HashMap<String, Object> remarkPaperByPaperNameAndStudentUser(RemarkPaperReqVO remarkPaperReqVO);
+
+    Result insertIncludeObjective(Map<String,Object> map);
 }

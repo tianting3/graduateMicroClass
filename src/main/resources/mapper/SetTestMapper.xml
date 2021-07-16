@@ -119,6 +119,15 @@
             id =#{id}
     </update>
 
+    <update id="updateIssueNameByPaperId" parameterType="com.tt.wkkt.vo.resp.IssuePaperNoIDReqVO">
+        UPDATE issue_paper
+        SET test_name = #{testName},
+        test_time = #{testTime},
+        degree = #{degree}
+        WHERE
+        paper_id=#{paperId}
+    </update>
+
     <select id="selectAllTestByPaperId" parameterType="int" resultType="int">
         SELECT
             question_id
@@ -184,4 +193,6 @@
     <delete id="removeIssuePaper" parameterType="int">
         delete from issue_paper where paper_id=#{paperId}
     </delete>
+
+
 </mapper>
